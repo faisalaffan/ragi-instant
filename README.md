@@ -90,6 +90,10 @@ results = ragi.search("What is fermentation?")
 - [ ] Built-in vector store adapters
 - [ ] Multi-provider LLM support
 
+## Documentation
+
+Full product requirements and design rationale: [docs/PRD.md](docs/PRD.md)
+
 ## License
 
 MIT © [Muhammad Faisal Affan](https://github.com/faisalaffan)

@@ -90,6 +90,10 @@ results = ragi.search("Apa itu fermentasi?")
 - [ ] Built-in vector store adapters
 - [ ] Multi-provider LLM support
 
+## Dokumentasi
+
+Dokumen kebutuhan produk dan rationale desain lengkap: [docs/PRD.md](docs/PRD.md)
+
 ## Lisensi
 
 MIT © [Muhammad Faisal Affan](https://github.com/faisalaffan)
