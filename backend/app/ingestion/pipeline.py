@@ -7,6 +7,7 @@ from uuid import UUID
 from sqlalchemy import func
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.ingestion.chunker import chunk_markdown
 from app.ingestion.indexer import delete_document_chunks
@@ -82,13 +83,13 @@ class IngestionPipeline:
 
     async def get_document(self, doc_id: UUID) -> Document | None:
         result = await self.db.execute(
-            select(Document).where(Document.id == doc_id)
+            select(Document).where(Document.id == doc_id).options(selectinload(Document.chunks))
         )
         return result.scalar_one_or_none()
 
     async def list_documents(self, limit: int = 20, offset: int = 0) -> tuple[list[Document], int]:
         result = await self.db.execute(
-            select(Document).order_by(Document.created_at.desc()).limit(limit).offset(offset)
+            select(Document).order_by(Document.created_at.desc()).limit(limit).offset(offset).options(selectinload(Document.chunks))
         )
         docs = result.scalars().all()
 
