@@ -1,0 +1,13 @@
+.git
+.git-crypt
+.gitattributes
+docs
+assets
+*.md
+.env
+.env.*
+__pycache__
+*.pyc
+.venv
+venv
+data
