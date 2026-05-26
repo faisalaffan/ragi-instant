@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use Ragi-Instant in your work, please cite it as below."
+title: "Ragi-Instant"
+abstract: "A production-grade RAG (Retrieval-Augmented Generation) library built for high-stakes domains like regulatory compliance."
+authors:
+  - family-names: "Affan"
+    given-names: "Muhammad Faisal"
+    orcid: ""
+repository-code: "https://github.com/faisalaffan/ragi-instant"
+license: "MIT"
+version: "0.1.0"
+date-released: "2026-05-26"

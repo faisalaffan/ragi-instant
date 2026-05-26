@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions
+    url: https://github.com/faisalaffan/ragi-instant/discussions
+    about: Ask questions and discuss ideas here
+  - name: Security Issues
+    url: https://github.com/faisalaffan/ragi-instant/security/policy
+    about: Report security vulnerabilities privately
