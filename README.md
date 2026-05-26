@@ -90,9 +90,11 @@ results = ragi.search("What is fermentation?")
 - [ ] Built-in vector store adapters
 - [ ] Multi-provider LLM support
 
-## Documentation
+## Our Approach
 
-Full product requirements and design rationale: [docs/PRD.md](docs/PRD.md)
+Ragi-Instant is built for production, not just demos. Our pipeline goes beyond basic vector search with hybrid retrieval, reranking, and structured output — all backed by an automated evaluation pipeline so we know exactly how well it performs. The goal is RAG that's trustworthy enough for high-stakes domains like regulatory compliance, where citation accuracy and hallucination prevention matter.
+
+> Full product requirements, stack decisions, architecture, and MVP timeline: [docs/PRD.md](docs/PRD.md)
 
 ## License
 
