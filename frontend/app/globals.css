@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Core OKLCH Tokens from Spec */
+  --color-primary: oklch(0.55 0.18 250);   /* Blue */
+  --color-success: oklch(0.60 0.18 145);   /* Green */
+  --color-warning: oklch(0.70 0.16 85);    /* Amber */
+  --color-danger: oklch(0.55 0.20 25);     /* Red */
+  --color-info: oklch(0.55 0.10 230);     /* Light Blue */
+
+  /* Status Colors */
+  --status-ready: var(--color-success);
+  --status-indexing: var(--color-warning);
+  --status-error: var(--color-danger);
+  --status-pending: oklch(0.55 0.02 270);
+
+  /* Confidence & Impact Levels */
+  --confidence-low: oklch(0.55 0.20 25);
+  --confidence-medium: oklch(0.70 0.16 85);
+  --confidence-high: oklch(0.60 0.18 145);
+
+  --impact-high: oklch(0.55 0.20 25);
+  --impact-medium: oklch(0.70 0.16 85);
+  --impact-low: oklch(0.60 0.18 145);
+
+  /* Layout Theme Colors (Premium Dark Mode by default) */
+  --background: oklch(0.12 0.015 250); 
+  --foreground: oklch(0.98 0.005 250);
+  
+  --card-bg: oklch(0.16 0.02 250 / 0.7);
+  --card-border: oklch(0.98 0.005 250 / 0.08);
+  --card-foreground: oklch(0.98 0.005 250);
+  
+  --muted: oklch(0.55 0.02 250);
+  --muted-foreground: oklch(0.75 0.01 250);
+
+  /* Sidebar sizes */
+  --sidebar-width: 16rem;
+  --sidebar-collapsed: 3.5rem;
+  
+  /* Radius scale */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+}
+
+:root[class~="light"] {
+  --background: oklch(0.98 0.01 250);
+  --foreground: oklch(0.12 0.015 250);
+
+  --card-bg: oklch(1 0 0 / 0.85);
+  --card-border: oklch(0.12 0.015 250 / 0.08);
+  --card-foreground: oklch(0.12 0.015 250);
+  
+  --muted: oklch(0.94 0.01 250);
+  --muted-foreground: oklch(0.45 0.01 250);
+}
+
+@theme {
+  --color-primary: var(--color-primary);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+  --color-info: var(--color-info);
+
+  --status-ready: var(--status-ready);
+  --status-indexing: var(--status-indexing);
+  --status-error: var(--status-error);
+  --status-pending: var(--status-pending);
+
+  --confidence-low: var(--confidence-low);
+  --confidence-medium: var(--confidence-medium);
+  --confidence-high: var(--confidence-high);
+
+  --impact-high: var(--impact-high);
+  --impact-medium: var(--impact-medium);
+  --impact-low: var(--impact-low);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card-bg);
+  --color-card-foreground: var(--card-foreground);
+  --color-card-border: var(--card-border);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+}
+
+/* Base resets & typography */
+html, body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Glassmorphism panel styling */
+.glass-panel {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -10px oklch(0.55 0.18 250 / 0.15);
+  border-color: oklch(0.55 0.18 250 / 0.25);
+}
+
+/* Custom premium scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: oklch(0.55 0.18 250 / 0.2);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.55 0.18 250 / 0.4);
+}
+
+/* Text Selection */
+::selection {
+  background-color: oklch(0.55 0.18 250 / 0.3);
+  color: inherit;
+}
