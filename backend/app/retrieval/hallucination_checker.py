@@ -77,7 +77,7 @@ async def check_hallucination(
 
         response = await asyncio.to_thread(
             lambda: client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=settings.generation_model,
                 messages=[{
                     "role": "user",
                     "content": CHECK_PROMPT.format(

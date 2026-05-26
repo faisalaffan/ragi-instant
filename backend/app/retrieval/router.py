@@ -20,12 +20,12 @@ Klasifikasikan query user ke salah satu intent berikut:
 - general: pertanyaan umum yang tidak masuk kategori di atas
 
 Return JSON dengan format:
-{
+{{
   "intent": "...",
   "keywords": ["kata", "kunci", "dari", "query"],
   "search_strategy": "dense_only" | "sparse_only" | "hybrid",
   "reasoning": "alasan singkat"
-}
+}}
 
 Aturan search_strategy:
 - regulation_lookup → hybrid (butuh exact match pasal + semantic similarity)
@@ -59,7 +59,7 @@ async def route_query(query: str) -> RouterResult:
 
         response = await asyncio.to_thread(
             lambda: client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=settings.generation_model,
                 messages=[{"role": "user", "content": ROUTER_PROMPT.format(query=query)}],
                 temperature=0.0,
                 max_tokens=300,

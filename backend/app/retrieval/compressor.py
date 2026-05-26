@@ -51,7 +51,7 @@ async def compress_context(
 
         response = await asyncio.to_thread(
             lambda: client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=settings.generation_model,
                 messages=[{
                     "role": "user",
                     "content": COMPRESSION_PROMPT.format(

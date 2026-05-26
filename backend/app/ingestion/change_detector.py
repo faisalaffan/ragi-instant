@@ -126,7 +126,7 @@ async def _analyze_diff_with_llm(
 
         response = await asyncio.to_thread(
             lambda: client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=settings.generation_model,
                 response_model=ChangeReport,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.1,

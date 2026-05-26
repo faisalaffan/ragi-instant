@@ -27,7 +27,7 @@ async def rewrite_query(query: str) -> str:
         client = get_openai_client()
         response = await asyncio.to_thread(
             lambda: client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=settings.generation_model,
                 messages=[{"role": "user", "content": REWRITE_PROMPT.format(query=query)}],
                 temperature=0.1,
                 max_tokens=200,
