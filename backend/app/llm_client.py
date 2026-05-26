@@ -4,6 +4,7 @@ from app.config import settings
 
 
 def get_openai_client() -> OpenAI:
+    """Client untuk LLM tasks (rewriting, routing, generation, etc)."""
     provider = settings.llm_provider
 
     if provider == "deepseek":
@@ -16,6 +17,14 @@ def get_openai_client() -> OpenAI:
             api_key=settings.openai_api_key,
             base_url=settings.openai_base_url,
         )
+
+
+def get_embedding_client() -> OpenAI:
+    """Client khusus embedding — selalu OpenAI karena DeepSeek belum punya embedding model."""
+    return OpenAI(
+        api_key=settings.openai_api_key,
+        base_url=settings.openai_base_url,
+    )
 
 
 def get_generation_model() -> str:

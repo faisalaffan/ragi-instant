@@ -5,7 +5,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
-from app.llm_client import get_openai_client
+from app.llm_client import get_embedding_client
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ class SearchResult:
 
 
 async def hybrid_search(db: AsyncSession, query: str) -> list[SearchResult]:
-    client = get_openai_client()
+    client = get_embedding_client()
 
     embedding_resp = await asyncio.to_thread(
         lambda: client.embeddings.create(model=EMBEDDING_MODEL, input=query)

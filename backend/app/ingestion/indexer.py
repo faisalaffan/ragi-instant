@@ -5,7 +5,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
-from app.llm_client import get_openai_client
+from app.llm_client import get_embedding_client
 from app.ingestion.chunker import ChunkResult
 from app.models.document import Chunk
 from app.models.document import Document
@@ -20,7 +20,7 @@ async def embed_and_index(
     document: Document,
     chunks: list[ChunkResult],
 ) -> int:
-    client = get_openai_client()
+    client = get_embedding_client()
 
     texts = [c.text for c in chunks]
     logger.info("Embedding %d chunks for document %s", len(texts), document.id)
