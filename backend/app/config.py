@@ -1,5 +1,5 @@
-from pydantic_settings import SettingsConfigDict
 from pydantic_settings import BaseSettings
+from pydantic_settings import SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -7,10 +7,12 @@ class Settings(BaseSettings):
 
     database_url: str = "postgresql://geostack:geostack@localhost:5432/ragi_instant"
     openai_api_key: str = ""
+    anthropic_api_key: str = ""
     cohere_api_key: str = ""
     langfuse_public_key: str = ""
     langfuse_secret_key: str = ""
     langfuse_host: str = ""
+    generation_model: str = "gpt-4o-mini"  # gpt-4o-mini | claude-haiku
     log_level: str = "INFO"
 
 

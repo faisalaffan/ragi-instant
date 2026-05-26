@@ -57,3 +57,9 @@ eval: ## Run RAGAS eval (butuh ssh-db + OPENAI_API_KEY)
 
 eval-ragas: ## Compute RAGAS metrics from eval results
 	cd backend && python -m app.eval.ragas_eval --results app/eval/results.json
+
+test: ## Run backend tests
+	cd backend && python -m pytest tests/ -v
+
+test-cov: ## Run backend tests with coverage
+	cd backend && python -m pytest tests/ -v --cov=app --cov-report=term-missing

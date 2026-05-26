@@ -69,27 +69,17 @@ Pertanyaan: {query}
 Jawab berdasarkan konteks di atas. Sertakan referensi ke nomor konteks [1], [2], dst."""
 
     try:
-        client = instructor.from_openai(
-            OpenAI(api_key=settings.openai_api_key)
-        )
+        model = settings.generation_model
 
-        response = await asyncio.to_thread(
-            lambda: client.chat.completions.create(
-                model="gpt-4o-mini",
-                response_model=AnswerResponse,
-                messages=[
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": user_prompt},
-                ],
-                temperature=0.2,
-                max_tokens=1500,
-            )
-        )
+        if model == "claude-haiku":
+            response = await _generate_anthropic(user_prompt)
+        else:
+            response = await _generate_openai(user_prompt)
 
         response.confidence = _compute_confidence(results, response.citations)
         logger.info(
-            "Generated answer: %d citations, confidence=%.2f",
-            len(response.citations), response.confidence,
+            "Generated answer (%s): %d citations, confidence=%.2f",
+            model, len(response.citations), response.confidence,
         )
         return response
 
@@ -101,6 +91,40 @@ Jawab berdasarkan konteks di atas. Sertakan referensi ke nomor konteks [1], [2],
             confidence=0.0,
             related_regulations=[],
         )
+
+
+async def _generate_openai(user_prompt: str) -> AnswerResponse:
+    client = instructor.from_openai(OpenAI(api_key=settings.openai_api_key))
+    return await asyncio.to_thread(
+        lambda: client.chat.completions.create(
+            model=settings.generation_model,
+            response_model=AnswerResponse,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=0.2,
+            max_tokens=1500,
+        )
+    )
+
+
+async def _generate_anthropic(user_prompt: str) -> AnswerResponse:
+    from anthropic import Anthropic
+
+    client = instructor.from_anthropic(
+        Anthropic(api_key=settings.anthropic_api_key)
+    )
+    return await asyncio.to_thread(
+        lambda: client.messages.create(
+            model="claude-3-5-haiku-latest",
+            max_tokens=1500,
+            temperature=0.2,
+            system=SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": user_prompt}],
+            response_model=AnswerResponse,
+        )
+    )
 
 
 def _compute_confidence(
