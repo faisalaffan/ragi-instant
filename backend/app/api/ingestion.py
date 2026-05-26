@@ -86,6 +86,11 @@ async def get_chunks(
 
 
 def _doc_to_response(doc) -> DocumentResponse:
+    try:
+        chunk_count = len(doc.chunks)
+    except Exception:
+        chunk_count = 0
+
     return DocumentResponse(
         id=doc.id,
         title=doc.title,
@@ -93,7 +98,7 @@ def _doc_to_response(doc) -> DocumentResponse:
         source_path=doc.source_path,
         status=doc.status,
         error_message=doc.error_message,
-        chunk_count=len(doc.chunks) if doc.chunks else 0,
+        chunk_count=chunk_count,
         created_at=doc.created_at,
         updated_at=doc.updated_at,
     )

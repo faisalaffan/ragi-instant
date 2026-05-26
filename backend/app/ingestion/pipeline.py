@@ -9,6 +9,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from app.db import async_session as _async_session_factory
 from app.ingestion.chunker import chunk_markdown
 from app.ingestion.indexer import delete_document_chunks
 from app.ingestion.indexer import embed_and_index
@@ -49,37 +50,39 @@ class IngestionPipeline:
         return doc
 
     async def _run(self, doc: Document, content: bytes, filename: str) -> None:
-        try:
-            doc.status = "parsing"
-            await self.db.commit()
-
-            with tempfile.NamedTemporaryFile(
-                suffix=Path(filename).suffix, delete=False
-            ) as tmp:
-                tmp.write(content)
-                tmp_path = Path(tmp.name)
-
+        async with _async_session_factory() as session:
             try:
-                parsed = parse_document(tmp_path, filename)
-            finally:
-                tmp_path.unlink()
+                doc = await session.merge(doc)
+                doc.status = "parsing"
+                await session.commit()
 
-            doc.status = "chunking"
-            doc.meta = parsed.metadata
-            await self.db.commit()
+                with tempfile.NamedTemporaryFile(
+                    suffix=Path(filename).suffix, delete=False
+                ) as tmp:
+                    tmp.write(content)
+                    tmp_path = Path(tmp.name)
 
-            chunks = chunk_markdown(parsed.markdown, parsed.metadata)
+                try:
+                    parsed = parse_document(tmp_path, filename)
+                finally:
+                    tmp_path.unlink()
 
-            doc.status = "indexing"
-            await self.db.commit()
+                doc.status = "chunking"
+                doc.meta = parsed.metadata
+                await session.commit()
 
-            await embed_and_index(self.db, doc, chunks)
+                chunks = chunk_markdown(parsed.markdown, parsed.metadata)
 
-        except Exception as exc:
-            logger.exception("Ingestion failed for %s", doc.id)
-            doc.status = "error"
-            doc.error_message = str(exc)
-            await self.db.commit()
+                doc.status = "indexing"
+                await session.commit()
+
+                await embed_and_index(session, doc, chunks)
+
+            except Exception as exc:
+                logger.exception("Ingestion failed for %s", doc.id)
+                doc.status = "error"
+                doc.error_message = str(exc)
+                await session.commit()
 
     async def get_document(self, doc_id: UUID) -> Document | None:
         result = await self.db.execute(
