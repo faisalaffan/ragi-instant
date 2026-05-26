@@ -11,6 +11,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.llm_client import get_openai_client
 from app.models.document import Document
 
 logger = logging.getLogger(__name__)
@@ -118,7 +119,7 @@ async def _analyze_diff_with_llm(
 ) -> ChangeReport:
     try:
         client = instructor.from_openai(
-            OpenAI(api_key=settings.openai_api_key)
+            get_openai_client()
         )
 
         prompt = CHANGE_DETECTION_PROMPT.format(diff=diff_text)

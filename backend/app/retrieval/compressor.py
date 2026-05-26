@@ -1,9 +1,9 @@
 import asyncio
 import logging
 
-from openai import OpenAI
 
 from app.config import settings
+from app.llm_client import get_openai_client
 from app.retrieval.searcher import SearchResult
 
 logger = logging.getLogger(__name__)
@@ -47,7 +47,7 @@ async def compress_context(
         return results
 
     try:
-        client = OpenAI(api_key=settings.openai_api_key)
+        client = get_openai_client()
 
         response = await asyncio.to_thread(
             lambda: client.chat.completions.create(

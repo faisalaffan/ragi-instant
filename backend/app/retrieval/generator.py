@@ -2,11 +2,11 @@ import asyncio
 import logging
 
 import instructor
-from openai import OpenAI
 from pydantic import BaseModel
 from pydantic import Field
 
 from app.config import settings
+from app.llm_client import get_openai_client
 from app.retrieval.searcher import SearchResult
 
 logger = logging.getLogger(__name__)
@@ -69,17 +69,18 @@ Pertanyaan: {query}
 Jawab berdasarkan konteks di atas. Sertakan referensi ke nomor konteks [1], [2], dst."""
 
     try:
-        model = settings.generation_model
+        provider = settings.llm_provider
 
-        if model == "claude-haiku":
+        if provider == "anthropic":
             response = await _generate_anthropic(user_prompt)
         else:
             response = await _generate_openai(user_prompt)
 
         response.confidence = _compute_confidence(results, response.citations)
         logger.info(
-            "Generated answer (%s): %d citations, confidence=%.2f",
-            model, len(response.citations), response.confidence,
+            "Generated answer (%s/%s): %d citations, confidence=%.2f",
+            provider, settings.generation_model,
+            len(response.citations), response.confidence,
         )
         return response
 
@@ -94,7 +95,7 @@ Jawab berdasarkan konteks di atas. Sertakan referensi ke nomor konteks [1], [2],
 
 
 async def _generate_openai(user_prompt: str) -> AnswerResponse:
-    client = instructor.from_openai(OpenAI(api_key=settings.openai_api_key))
+    client = instructor.from_openai(get_openai_client())
     return await asyncio.to_thread(
         lambda: client.chat.completions.create(
             model=settings.generation_model,
