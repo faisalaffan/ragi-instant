@@ -94,8 +94,6 @@ results = ragi.search("Apa itu fermentasi?")
 
 Ragi-Instant dibangun untuk production, bukan sekadar demo. Pipeline kami melampaui vector search dasar dengan hybrid retrieval, reranking, dan structured output — semuanya didukung pipeline evaluasi otomatis sehingga kami tahu persis seberapa baik performanya. Tujuannya adalah RAG yang cukup tepercaya untuk domain berisiko tinggi seperti kepatuhan regulasi, di mana akurasi kutipan dan pencegahan halusinasi sangat penting.
 
-> Dokumen kebutuhan produk, keputusan stack, arsitektur, dan timeline MVP selengkapnya: [docs/PRD.md](docs/PRD.md)
-
 ## Lisensi
 
 MIT © [Muhammad Faisal Affan](https://github.com/faisalaffan)
