@@ -7,10 +7,13 @@ RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends \
 
 WORKDIR /app
 
+# Install deps dulu — layer ini di-cache selama pyproject.toml tidak berubah
 COPY pyproject.toml .
-COPY app/ ./app/
+RUN pip install --no-cache-dir $(python3 -c "import tomllib; d=tomllib.load(open('pyproject.toml','rb')); print(' '.join(d['project']['dependencies']))") && \
+    pip install --no-cache-dir instructor anthropic
 
-RUN pip install --no-cache-dir .
+# Copy kode — layer ini ringan, rebuild cepat
+COPY app/ ./app/
 
 EXPOSE 8000
 
