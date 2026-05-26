@@ -17,42 +17,35 @@
 </p>
 
 <p align="center">
-  <strong>RAG System that is simple and fast. Like ragi to make Indonesian bread.</strong>
+  <strong>Production-grade RAG library. Hybrid search, reranking, structured output, automated evaluation — all in one pipeline.</strong>
 </p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
-  <a href="#"><img src="https://img.shields.io/badge/status-draft-orange.svg" alt="Status"></a>
+  <a href="#"><img src="https://img.shields.io/badge/status-active--development-green.svg" alt="Status"></a>
   <a href="#"><img src="https://img.shields.io/badge/platform-Python%20%7C%20Go%20%7C%20TypeScript-lightgrey.svg" alt="Platform"></a>
 </p>
 
 ---
 
-**Ragi-Instant** is a RAG (Retrieval-Augmented Generation) library designed for simplicity and speed. Like instant yeast that you just add to dough, Ragi-Instant integrates into your existing AI project — immediately enabling document indexing, semantic search, and context retrieval to augment LLM responses.
+**Ragi-Instant** is a RAG (Retrieval-Augmented Generation) library that goes beyond the tutorial-level `embed → search → generate` loop. It packages a production-grade pipeline — hybrid retrieval, cross-encoder reranking, citation-grounded structured output, and automated evaluation — into a library you can integrate in minutes.
 
-> _"Why should RAG be so complicated? Instant yeast just needs to be added, and it rises."_
+## Key Capabilities
 
-## Philosophy
+**Hybrid Search**
+Dense vector search combined with sparse keyword retrieval (BM25) fused via Reciprocal Rank Fusion. Catches both semantic matches and exact keyword hits that embeddings alone miss.
 
-### Three Principles of Ragi
+**Reranking**
+Cross-encoder reranking on retrieved candidates. Improves recall@5 significantly over raw vector similarity — the difference between "mostly relevant" and "actually useful" context.
 
-**1. Simple like a sachet**  
-Instant yeast comes in sachets — open, add, done. No complex activation. Ragi-Instant is the same: one install, minimal config, RAG ready to go.
+**Structured Output & Citations**
+Every answer comes with source citations pointing to the exact chunk, document, and page. No black-box answers — users can verify every claim.
 
-**2. Fast like instant**  
-Instant yeast works faster than regular yeast. Ragi-Instant is built for fast indexing, fast retrieval, and response times that don't keep users waiting.
+**Automated Evaluation**
+Built-in evaluation pipeline that measures faithfulness, answer relevancy, and context precision. You ship with numbers, not faith.
 
-**3. Rises like yeast**  
-Yeast transforms flat dough into risen bread — adding volume, texture, and value. RAG transforms simple queries into context-rich answers — adding depth, accuracy, and relevance.
-
-### Core Values
-
-| Value          | Meaning                                        |
-| -------------- | ---------------------------------------------- |
-| **Simple**     | Minimal setup, running in 10 minutes           |
-| **Fast**       | Indexing and retrieval optimized from the start |
-| **Flexible**   | Support for various vector stores and LLM providers |
-| **Indonesian** | Built with local context and needs             |
+**Observability**
+End-to-end tracing of every retrieval and generation step. Know exactly which chunk influenced which part of the answer, how long each step took, and where quality degrades.
 
 ## Installation
 
@@ -72,27 +65,75 @@ npm install ragi-instant
 ```python
 from ragi_instant import Ragi
 
-# Initialize with default settings
 ragi = Ragi()
 
-# Index your documents
+# Index documents with hybrid search
 ragi.index("path/to/documents")
 
-# Search
-results = ragi.search("What is fermentation?")
+# Search across dense + sparse indices
+results = ragi.search(
+    "What are the latest OJK regulations on peer-to-peer lending?",
+    top_k=5,
+    rerank=True,
+    citations=True
+)
+
+# Structured response
+print(results.answer)
+for cite in results.citations:
+    print(f"  [{cite.chunk_id}] {cite.doc_name}, p.{cite.page}")
 ```
+
+## Architecture
+
+```
+Ingestion:
+  PDF/DOCX → Layout-aware parsing → Semantic chunking
+           → Dual index (dense vector + sparse BM25)
+           → Metadata attached (doc_id, page, section, date)
+
+Query:
+  User question → Parallel retrieval (dense + sparse)
+                → RRF fusion → Cross-encoder reranking
+                → Context assembly → Structured generation
+                → Answer + citations + confidence score
+
+Evaluation (async):
+  Each query → Trace all steps → Run evals → Log metrics
+```
+
+## Study Case: Regulatory & Compliance Intelligence
+
+Ragi-Instant is built for high-stakes document domains where accuracy matters more than speed:
+
+- **Multi-document reasoning** — cross-reference regulations across documents and versions
+- **Change detection** — track what changed between regulation revisions
+- **Citation-grounded answers** — every claim backed by exact source, page, and quote
+- **Structured output** — answers with confidence scores, related regulations, and chunk-level provenance
+
+Ideal for legal, compliance, fintech, and any domain where hallucination is not an option.
+
+## Benchmark Targets
+
+Real numbers ship with the MVP. These are the targets we're building toward:
+
+| Metric            | Target |
+| ----------------- | ------ |
+| Faithfulness      | > 0.85 |
+| Answer Relevancy  | > 0.80 |
+| Context Precision | > 0.75 |
+| Avg latency        | < 2s   |
+
+Evaluated on 30+ Q&A pairs sourced from real regulatory documents.
 
 ## Roadmap
 
-- [ ] Python SDK
-- [ ] Go SDK
-- [ ] TypeScript SDK
-- [ ] Built-in vector store adapters
-- [ ] Multi-provider LLM support
-
-## Our Approach
-
-Ragi-Instant is built for production, not just demos. Our pipeline goes beyond basic vector search with hybrid retrieval, reranking, and structured output — all backed by an automated evaluation pipeline so we know exactly how well it performs. The goal is RAG that's trustworthy enough for high-stakes domains like regulatory compliance, where citation accuracy and hallucination prevention matter.
+- [ ] **Python SDK** — FastAPI integration, async indexing, batch ingestion
+- [ ] **Go SDK** — High-throughput ingestion, concurrent retrieval
+- [ ] **TypeScript SDK** — Browser and edge runtime support
+- [ ] **Docker Compose** — One-command local stack (Postgres + pgvector + API)
+- [ ] **Eval dashboard** — Visualize faithfulness, relevancy, and precision trends over time
+- [ ] **Query rewriting** — LLM-based query expansion for ambiguous inputs
 
 ## License
 
