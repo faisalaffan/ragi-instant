@@ -1,18 +1,51 @@
 version: 2
 updates:
-  - package-ecosystem: "pip"
-    directory: "/"
+  - package-ecosystem: pip
+    directory: /backend
     schedule:
-      interval: "weekly"
+      interval: weekly
+      day: monday
+      time: '08:30'
+      timezone: Asia/Jakarta
     open-pull-requests-limit: 5
     labels:
-      - "dependencies"
-      - "python"
+      - dependencies
+      - python
+    groups:
+      python-deps:
+        patterns:
+          - '*'
+        update-types:
+          - minor
+          - patch
 
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: npm
+    directory: /frontend
     schedule:
-      interval: "monthly"
+      interval: weekly
+      day: monday
+      time: '08:30'
+      timezone: Asia/Jakarta
+    open-pull-requests-limit: 5
     labels:
-      - "dependencies"
-      - "ci"
+      - dependencies
+      - javascript
+    groups:
+      js-deps:
+        patterns:
+          - '*'
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    labels:
+      - dependencies
+      - ci
+    groups:
+      actions-deps:
+        patterns:
+          - '*'
