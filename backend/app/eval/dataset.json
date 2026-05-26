@@ -1,0 +1,122 @@
+[
+    {
+        "question": "Apa batas maksimum bunga pinjaman online per hari menurut OJK?",
+        "ground_truth": "Batas maksimum bunga pinjaman online adalah 0,4% per hari sesuai POJK No. 10/PT. LKM/2022."
+    },
+    {
+        "question": "Berapa rasio kecukupan modal minimum (CAR) yang diwajibkan BI untuk bank umum?",
+        "ground_truth": "Bank umum wajib memenuhi CAR minimum sebesar 8% sesuai ketentuan Bank Indonesia."
+    },
+    {
+        "question": "Apa definisi Usaha Mikro menurut UU No. 20 Tahun 2008?",
+        "ground_truth": "Usaha Mikro adalah usaha produktif milik orang perorangan dengan kekayaan bersih maksimal Rp 50 juta tidak termasuk tanah dan bangunan."
+    },
+    {
+        "question": "Bagaimana ketentuan OJK tentang tata kelola perusahaan (GCG) bagi bank?",
+        "ground_truth": "Bank wajib menerapkan prinsip GCG yang mencakup transparansi, akuntabilitas, responsibilitas, independensi, dan kewajaran sesuai POJK tentang Tata Kelola Bank."
+    },
+    {
+        "question": "Apa sanksi bagi fintech lending yang melanggar batas maksimum bunga?",
+        "ground_truth": "Sanksi administratif berupa peringatan tertulis, denda, pembatasan kegiatan usaha, hingga pencabutan izin usaha."
+    },
+    {
+        "question": "Berapa modal minimum untuk mendirikan bank umum di Indonesia?",
+        "ground_truth": "Modal disetor minimum untuk mendirikan bank umum adalah Rp 3 triliun sesuai POJK tentang Pendirian Bank."
+    },
+    {
+        "question": "Apa saja jenis laporan yang wajib disampaikan bank ke OJK secara berkala?",
+        "ground_truth": "Bank wajib menyampaikan laporan bulanan, laporan keuangan publikasi triwulanan, dan laporan tahunan termasuk laporan GCG."
+    },
+    {
+        "question": "Bagaimana aturan BI tentang transfer dana melalui BI-Fast?",
+        "ground_truth": "BI-Fast adalah sistem pembayaran ritel nasional yang beroperasi 24/7 dengan biaya maksimal Rp 2.500 per transaksi."
+    },
+    {
+        "question": "Apa ketentuan OJK tentang perlindungan data pribadi nasabah?",
+        "ground_truth": "Bank dan lembaga keuangan wajib menjaga kerahasiaan data nasabah dan hanya dapat membuka data atas perintah pengadilan, untuk kepentingan perpajakan, atau atas persetujuan nasabah."
+    },
+    {
+        "question": "Berapa batas maksimum pemberian kredit (BMPK) kepada satu peminjam?",
+        "ground_truth": "BMPK untuk pihak terkait maksimal 10% dari modal bank dan untuk pihak tidak terkait maksimal 25-30% dari modal bank."
+    },
+    {
+        "question": "Apa saja persyaratan izin usaha perusahaan asuransi di Indonesia?",
+        "ground_truth": "Perusahaan asuransi wajib memiliki modal disetor minimal Rp 150 miliar untuk asuransi umum dan Rp 100 miliar untuk asuransi jiwa."
+    },
+    {
+        "question": "Bagaimana ketentuan anti pencucian uang (AML) untuk bank?",
+        "ground_truth": "Bank wajib menerapkan program AML/CFT termasuk Customer Due Diligence (CDD), Enhanced Due Diligence (EDD), dan pelaporan transaksi mencurigakan ke PPATK."
+    },
+    {
+        "question": "Apa definisi kredit macet (Non-Performing Loan) menurut OJK?",
+        "ground_truth": "NPL adalah kredit dengan kualitas kurang lancar, diragukan, dan macet. Rasio NPL netto maksimal 5% dari total kredit."
+    },
+    {
+        "question": "Bagaimana aturan OJK tentang layanan pinjam meminjam uang berbasis teknologi (fintech P2P)?",
+        "ground_truth": "Fintech P2P wajib memiliki izin OJK, mempunyai modal disetor minimal Rp 2,5 miliar, dan menerapkan batas maksimum pendanaan."
+    },
+    {
+        "question": "Apa perbedaan Bank Umum, BPR, dan Bank Syariah dalam regulasi Indonesia?",
+        "ground_truth": "Bank Umum melayani jasa lalu lintas pembayaran, BPR tidak melayani jasa lalu lintas pembayaran, Bank Syariah beroperasi berdasarkan prinsip syariah."
+    },
+    {
+        "question": "Bagaimana mekanisme penyelesaian sengketa nasabah dengan bank?",
+        "ground_truth": "Nasabah dapat mengajukan pengaduan ke bank, lalu ke OJK jika tidak puas. Alternatif melalui LAPSPI (Lembaga Alternatif Penyelesaian Sengketa Perbankan Indonesia)."
+    },
+    {
+        "question": "Apa ketentuan OJK tentang uang elektronik (e-money)?",
+        "ground_truth": "Penerbit e-money wajib memiliki izin Bank Indonesia/OJK, modal disetor minimal Rp 5 miliar, dan floating fund maksimal Rp 1 miliar untuk unregistered."
+    },
+    {
+        "question": "Berapa tingkat inflasi yang menjadi target BI dalam kerangka ITF?",
+        "ground_truth": "Target inflasi BI adalah 2,5% ± 1% untuk tahun 2024-2026 sesuai Peraturan Menteri Keuangan."
+    },
+    {
+        "question": "Apa saja jenis risiko yang wajib dikelola bank sesuai regulasi OJK?",
+        "ground_truth": "Bank wajib mengelola 8 jenis risiko: kredit, pasar, likuiditas, operasional, hukum, reputasi, stratejik, dan kepatuhan."
+    },
+    {
+        "question": "Bagaimana aturan OJK tentang bank digital?",
+        "ground_truth": "Bank digital wajib memiliki modal inti minimal Rp 10 triliun untuk pendirian baru atau Rp 3 triliun untuk transformasi dari bank existing."
+    },
+    {
+        "question": "Apa kewajiban pelaporan transaksi keuangan mencurigakan sesuai UU TPPU?",
+        "ground_truth": "Penyedia jasa keuangan wajib melaporkan transaksi mencurigakan ke PPATK paling lambat 3 hari kerja sejak diketahui."
+    },
+    {
+        "question": "Bagaimana ketentuan OJK tentang konglomerasi keuangan?",
+        "ground_truth": "Konglomerasi keuangan wajib memiliki perusahaan induk dan menerapkan manajemen risiko terintegrasi untuk seluruh entitas dalam grup."
+    },
+    {
+        "question": "Apa saja syarat pencabutan izin usaha bank oleh OJK?",
+        "ground_truth": "OJK dapat mencabut izin usaha bank jika kondisi keuangan membahayakan kelangsungan usaha, bank tidak dapat dityehatkan, atau pelanggaran berat terhadap regulasi."
+    },
+    {
+        "question": "Bagaimana aturan OJK tentang derivatif keuangan?",
+        "ground_truth": "Transaksi derivatif wajib memiliki underlying, didukung analisis risiko, dan dilaporkan secara berkala ke OJK."
+    },
+    {
+        "question": "Apa itu kewajiban pemenuhan rasio pembiayaan inklusif makroprudensial (RPIM)?",
+        "ground_truth": "RPIM adalah kewajiban bank untuk menyalurkan kredit/pembiayaan kepada UMKM minimal 20% dari total kredit secara bertahap."
+    },
+    {
+        "question": "Bagaimana aturan OJK tentang produk investasi terstruktur (structured product)?",
+        "ground_truth": "Produk investasi terstruktur wajib mendapatkan persetujuan OJK, disertai prospektus, dan hanya dapat dijual kepada investor tertentu."
+    },
+    {
+        "question": "Apa ketentuan OJK tentang penilaian kualitas aset bank?",
+        "ground_truth": "Aset bank dinilai dalam 5 kategori: lancar, dalam perhatian khusus, kurang lancar, diragukan, dan macet, dengan pembentukan CKPN sesuai kategori."
+    },
+    {
+        "question": "Bagaimana regulasi OJK tentang equity crowdfunding?",
+        "ground_truth": "Equity crowdfunding diatur dalam POJK No. 37/2018 dengan batas maksimum penghimpunan dana Rp 10 miliar untuk UMKM."
+    },
+    {
+        "question": "Apa itu Prinsip Mengenal Nasabah (KYC) dan bagaimana penerapannya?",
+        "ground_truth": "KYC adalah prinsip untuk mengenali profil dan karakteristik nasabah sebelum memberikan layanan keuangan, termasuk verifikasi identitas, sumber dana, dan tujuan transaksi."
+    },
+    {
+        "question": "Bagaimana ketentuan OJK tentang penggunaan cloud computing oleh bank?",
+        "ground_truth": "Bank wajib melapor ke OJK sebelum menggunakan layanan cloud, memastikan data tetap berada di Indonesia, dan memiliki rencana kontingensi."
+    }
+]
