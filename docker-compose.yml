@@ -6,18 +6,19 @@ services:
     container_name: ragi-instant-api
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
       - DATABASE_URL=postgresql://geostack:${PG_PASSWORD:-geostack}@geostack-postgres-1:5432/ragi_instant
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
       - COHERE_API_KEY=${COHERE_API_KEY}
+      - GENERATION_MODEL=${GENERATION_MODEL:-gpt-4o-mini}
       - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY:-}
       - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY:-}
       - LANGFUSE_HOST=${LANGFUSE_HOST:-}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
     volumes:
       - ./data/uploads:/data/uploads
-      - ./data/chroma:/data/chroma
     networks:
       - geostack_default
     healthcheck:
