@@ -1,0 +1,40 @@
+name: Housekeeping
+
+on:
+  schedule:
+    - cron: '37 3 * * 0'  # Minggu 03:37 UTC = 10:37 WIB
+  workflow_dispatch:
+
+jobs:
+  stale:
+    name: Stale Issues & PRs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          days-before-stale: 60
+          days-before-close: 14
+          stale-issue-message: 'Issue ini otomatis ditandai stale karena tidak ada aktivitas selama 60 hari. Akan ditutup dalam 14 hari jika tidak ada update.'
+          stale-pr-message: 'PR ini otomatis ditandai stale karena tidak ada aktivitas selama 60 hari. Akan ditutup dalam 14 hari jika tidak ada update.'
+          exempt-issue-labels: pinned,security
+          exempt-pr-labels: pinned,security,dependencies
+          labels-to-add-when-stale: stale
+          labels-to-remove-when-stale: stale
+
+  auto-merge:
+    name: Auto-merge Dependabot PRs
+    runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable auto-merge for Dependabot
+        run: |
+          gh pr list --author dependabot[bot] --state open --json number,title \
+            --jq '.[] | select(.title | test("bump|update"; "i")) | .number' \
+          | while read pr; do
+            echo "Auto-merging PR #$pr"
+            gh pr merge $pr --auto --squash --delete-branch
+          done || echo "No Dependabot PRs to auto-merge"
+        env:
+          GH_TOKEN: ${{ github.token }}
