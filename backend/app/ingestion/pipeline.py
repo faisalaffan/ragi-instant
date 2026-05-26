@@ -100,6 +100,15 @@ class IngestionPipeline:
 
         return list(docs), total
 
+    async def delete_document(self, doc_id: UUID) -> bool:
+        doc = await self.get_document(doc_id)
+        if doc is None:
+            return False
+        await self.db.delete(doc)
+        await self.db.commit()
+        logger.info("Deleted document %s", doc_id)
+        return True
+
     async def get_chunks(self, doc_id: UUID) -> list[Chunk]:
         result = await self.db.execute(
             select(Chunk)

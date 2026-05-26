@@ -64,6 +64,17 @@ async def get_document(
     return _doc_to_response(doc)
 
 
+@router.delete("/documents/{doc_id}", status_code=204)
+async def delete_document(
+    doc_id: str,
+    db: AsyncSession = Depends(get_db),
+) -> None:
+    pipeline = IngestionPipeline(db)
+    deleted = await pipeline.delete_document(UUID(doc_id))
+    if not deleted:
+        raise HTTPException(404, "Document not found")
+
+
 @router.get("/documents/{doc_id}/chunks", response_model=list[ChunkResponse])
 async def get_chunks(
     doc_id: str,
