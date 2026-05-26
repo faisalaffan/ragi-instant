@@ -2,9 +2,9 @@ import { Document, Chunk, AnswerResponse, ChangeReport } from '@/types';
 
 const BASE_URL = () => {
   if (typeof window === 'undefined') {
-    return process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://vps:8000';
+    return process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
   }
-  return localStorage.getItem('ragi-instant.settings.apiUrl') || 'http://vps:8000';
+  return localStorage.getItem('ragi-instant.settings.apiUrl') || 'http://localhost:8000';
 };
 
 export class ApiError extends Error {

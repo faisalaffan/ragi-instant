@@ -31,7 +31,7 @@ export const useUIStore = create<UIState>()(
       theme: 'dark',
       fontSize: 'md',
       language: 'id',
-      apiUrl: 'http://vps:8000',
+      apiUrl: 'http://localhost:8000',
 
       toggleSidebar: () => set((state) => ({ sidebarExpanded: !state.sidebarExpanded })),
       setSidebarExpanded: (expanded) => set({ sidebarExpanded: expanded }),
@@ -52,7 +52,7 @@ export const useUIStore = create<UIState>()(
 
       setFontSize: (fontSize) => set({ fontSize }),
       setLanguage: (language) => set({ language }),
-      
+
       setApiUrl: (apiUrl) => {
         set({ apiUrl });
         if (typeof window !== 'undefined') {
@@ -69,9 +69,9 @@ export const useUIStore = create<UIState>()(
           theme: 'dark',
           fontSize: 'md',
           language: 'id',
-          apiUrl: 'http://vps:8000',
+          apiUrl: 'http://localhost:8000',
         });
-        
+
         // Re-apply dark theme class
         if (typeof window !== 'undefined') {
           const root = window.document.documentElement;
