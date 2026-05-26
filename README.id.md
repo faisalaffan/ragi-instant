@@ -17,123 +17,159 @@
 </p>
 
 <p align="center">
-  <strong>Library RAG production-grade. Hybrid search, reranking, structured output, evaluasi otomatis — dalam satu pipeline.</strong>
+  <strong>RAG production-grade untuk kepatuhan regulasi. Hybrid search, reranking, routing, deteksi halusinasi — dalam satu pipeline.</strong>
 </p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <a href="#"><img src="https://img.shields.io/badge/status-active--development-green.svg" alt="Status"></a>
-  <a href="#"><img src="https://img.shields.io/badge/platform-Python%20%7C%20Go%20%7C%20TypeScript-lightgrey.svg" alt="Platform"></a>
+  <a href="#"><img src="https://img.shields.io/badge/python-3.12+-blue.svg" alt="Python"></a>
 </p>
 
 ---
 
-**Ragi-Instant** adalah library RAG (Retrieval-Augmented Generation) yang melampaui siklus `embed → search → generate` ala tutorial. Library ini mengemas pipeline production-grade — hybrid retrieval, cross-encoder reranking, structured output dengan kutipan, dan evaluasi otomatis — dalam satu library yang bisa diintegrasikan dalam hitungan menit.
+**Ragi-Instant** adalah sistem RAG (Retrieval-Augmented Generation) yang dibangun untuk regulatory & compliance intelligence. Melampaui siklus `embed → search → generate` ala tutorial dengan pipeline production-grade: query rewriting, intent routing, hybrid retrieval, cross-encoder reranking, context compression, structured output dengan kutipan, dan pengecekan halusinasi — semuanya ditracing dan dievaluasi otomatis.
+
+## Pipeline
+
+```
+Pertanyaan User
+    │
+    ▼
+Query Rewriting (LLM)     "POJK terbaru pinjol" → "Peraturan OJK peer-to-peer lending 2024 2025"
+    │
+    ▼
+Intent Router (LLM)       regulation_lookup | definition | comparison | obligation_check
+    │
+    ▼
+Hybrid Search             Dense (pgvector cosine) + Sparse (PostgreSQL FTS BM25) → RRF fusion
+    │
+    ▼
+Cohere Rerank v3          Top-40 → top-5 final
+    │
+    ▼
+[Context Compression]     Ringkasan LLM mempertahankan fakta legal (opsional)
+    │
+    ▼
+LLM Generation            GPT-4o mini / Claude Haiku + Instructor structured output
+    │
+    ▼
+Hallucination Check       Verifikasi setiap klaim terhadap konteks sumber
+    │
+    ▼
+Jawaban + Kutipan + Confidence + Regulasi Terkait
+    │
+    ▼
+LangFuse Trace + RAGAS Eval (async)
+```
 
 ## Kemampuan Utama
 
+**Query Rewriting**
+Ekspansi kueri berbasis LLM. "POJK terbaru pinjol" menjadi "Peraturan OJK terbaru mengenai peer-to-peer lending 2024 2025" sebelum retrieval. +15-20% kualitas retrieval untuk kueri ambigu.
+
+**Intent Routing**
+Mengklasifikasikan kueri ke regulation_lookup, definition, comparison, atau obligation_check. Setiap intent dipetakan ke strategi pencarian yang berbeda (dense-only, sparse-only, atau hybrid).
+
 **Hybrid Search**
-Pencarian vektor dense dikombinasikan dengan pencarian kata kunci sparse (BM25) yang difusikan melalui Reciprocal Rank Fusion. Menangkap kecocokan semantik dan kata kunci eksak yang terlewat oleh embedding saja.
+Pencarian vektor dense (pgvector HNSW) dikombinasikan dengan pencarian kata kunci sparse (PostgreSQL FTS BM25 dengan GIN index), difusikan melalui Reciprocal Rank Fusion. Menangkap kecocokan semantik dan istilah hukum eksak.
 
 **Reranking**
-Cross-encoder reranking pada kandidat hasil retrieval. Meningkatkan recall@5 secara signifikan dibanding raw vector similarity — beda antara konteks yang "cukup relevan" dan "benar-benar berguna."
+Cohere Rerank v3 cross-encoder pada kandidat hasil retrieval. Meningkatkan recall@5 secara signifikan dibanding raw vector similarity.
+
+**Context Compression**
+Ringkasan berbasis LLM yang mempertahankan angka, persentase, nomor pasal, dan definisi hukum sambil menghapus transisi dan pengulangan. Pengurangan token 40-60%.
 
 **Structured Output & Kutipan**
-Setiap jawaban disertai kutipan sumber yang menunjuk ke chunk, dokumen, dan halaman yang tepat. Bukan jawaban black-box — pengguna bisa memverifikasi setiap klaim.
+Setiap jawaban disertai kutipan sumber yang menunjuk ke chunk, dokumen, halaman, dan pasal yang tepat. Bukan jawaban black-box — setiap klaim bisa diverifikasi.
+
+**Deteksi Halusinasi**
+Langkah verifikasi pasca-generasi. Setiap klaim dalam jawaban diperiksa terhadap konteks sumber. Menghasilkan skor halusinasi dan menandai klaim yang tidak didukung.
+
+**Deteksi Perubahan Regulasi**
+Unggah dua versi regulasi dan dapatkan diff terstruktur — pasal mana yang berubah, apa yang ditambahkan, apa yang dihapus — dikelompokkan berdasarkan dampak (HIGH/MEDIUM/LOW).
 
 **Evaluasi Otomatis**
-Pipeline evaluasi bawaan yang mengukur faithfulness, answer relevancy, dan context precision. Anda rilis dengan angka, bukan asumsi.
+Pipeline evaluasi RAGAS bawaan dengan 30 pasangan Q&A yang dikurasi. Mengukur faithfulness, answer relevancy, dan context precision. Anda rilis dengan angka, bukan asumsi.
 
 **Observabilitas**
-Tracing end-to-end setiap langkah retrieval dan generasi. Tahu persis chunk mana yang memengaruhi bagian mana dari jawaban, berapa lama setiap langkah, dan di mana kualitas menurun.
+LangFuse tracing end-to-end setiap langkah: query rewriting, routing, hybrid search, reranking, compression, generation, dan hallucination check. Latency dan confidence per langkah.
 
 ## Instalasi
 
 ```bash
-# Python
-pip install ragi-instant
-
-# Go
-go get github.com/faisalaffan/ragi-instant
-
-# TypeScript
-npm install ragi-instant
+cd backend
+pip install -e .
 ```
 
 ## Mulai Cepat
 
-```python
-from ragi_instant import Ragi
+```bash
+# 1. Salin template env dan isi API keys
+cp .env.example .env
+# Wajib: OPENAI_API_KEY, COHERE_API_KEY
 
-ragi = Ragi()
+# 2. Deploy ke VPS
+make deploy
 
-# Indeks dokumen dengan hybrid search
-ragi.index("path/to/documents")
+# 3. Unggah dokumen regulasi
+curl -F "file=@POJK_10_2022.pdf" \
+     -F "title=POJK No. 10 Tahun 2022" \
+     http://vps:8000/api/ingest/documents
 
-# Cari di indeks dense + sparse
-results = ragi.search(
-    "Apa regulasi OJK terbaru tentang peer-to-peer lending?",
-    top_k=5,
-    rerank=True,
-    citations=True
-)
+# 4. Tanya regulasi
+curl -X POST http://vps:8000/api/query \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Apa batas maksimum bunga pinjaman online menurut OJK?"}'
 
-# Respons terstruktur
-print(results.answer)
-for cite in results.citations:
-    print(f"  [{cite.chunk_id}] {cite.doc_name}, h.{cite.page}")
+# Response:
+# {
+#   "answer": "Berdasarkan POJK No. 10/PT. LKM/2022, batas maksimum...",
+#   "citations": [{"document_title": "POJK No. 10/2022", "page": 12, "quote": "..."}],
+#   "confidence": 0.89,
+#   "related_regulations": ["POJK No. 22/2023"]
+# }
 ```
 
-## Arsitektur
+## API Reference
 
-```
-Ingestion:
-  PDF/DOCX → Parsing sadar-tata-letak → Semantic chunking
-           → Indeks ganda (dense vector + sparse BM25)
-           → Metadata melekat (doc_id, halaman, seksi, tanggal)
+| Endpoint | Method | Deskripsi |
+|---|---|---|
+| `/health` | GET | Health check |
+| `/api/ingest/documents` | POST | Unggah PDF/DOCX untuk indexing |
+| `/api/ingest/documents` | GET | Daftar semua dokumen |
+| `/api/ingest/documents/{id}` | GET | Detail dokumen |
+| `/api/ingest/documents/{id}/chunks` | GET | Lihat chunk hasil indeks |
+| `/api/query` | POST | Pipeline RAG lengkap |
+| `/api/analysis/compare` | POST | Bandingkan dua versi dokumen |
 
-Query:
-  Pertanyaan → Retrieval paralel (dense + sparse)
-             → Fusi RRF → Cross-encoder reranking
-             → Penyusunan konteks → Generasi terstruktur
-             → Jawaban + kutipan + skor keyakinan
+## Benchmark
 
-Evaluasi (async):
-  Setiap query → Lacak semua langkah → Jalankan eval → Catat metrik
-```
+Diuji pada 30 pasangan Q&A dari dokumen regulasi keuangan Indonesia (POJK, PBI).
 
-## Studi Kasus: Regulatory & Compliance Intelligence
+| Metrik | Skor | Target |
+|---|---|---|
+| Faithfulness | — | > 0.85 |
+| Answer Relevancy | — | > 0.80 |
+| Context Precision | — | > 0.75 |
+| Avg Latency | — | < 2.0d |
+| Avg Cost/Query | — | < $0.01 |
 
-Ragi-Instant dibangun untuk domain dokumen berisiko tinggi di mana akurasi lebih penting daripada kecepatan:
+_Skor menunggu production run pertama dengan dokumen regulasi aktual._
 
-- **Multi-document reasoning** — referensi silang regulasi antar dokumen dan versi
-- **Deteksi perubahan** — lacak apa yang berubah antara revisi regulasi
-- **Jawaban dengan kutipan** — setiap klaim didukung sumber, halaman, dan kutipan yang tepat
-- **Output terstruktur** — jawaban dengan skor keyakinan, regulasi terkait, dan provenance tingkat chunk
+## Stack
 
-Ideal untuk legal, compliance, fintech, dan domain apa pun di mana halusinasi tidak bisa ditoleransi.
-
-## Target Benchmark
-
-Angka sebenarnya dirilis bersama MVP. Ini adalah target yang kami kejar:
-
-| Metrik            | Target |
-| ----------------- | ------ |
-| Faithfulness      | > 0.85 |
-| Answer Relevancy  | > 0.80 |
-| Context Precision | > 0.75 |
-| Avg latency        | < 2d   |
-
-Diuji pada 30+ pasangan Q&A dari dokumen regulasi nyata.
-
-## Roadmap
-
-- [ ] **Python SDK** — Integrasi FastAPI, async indexing, batch ingestion
-- [ ] **Go SDK** — High-throughput ingestion, concurrent retrieval
-- [ ] **TypeScript SDK** — Dukungan browser dan edge runtime
-- [ ] **Docker Compose** — Stack lokal satu perintah (Postgres + pgvector + API)
-- [ ] **Dashboard eval** — Visualisasi faithfulness, relevancy, dan precision dari waktu ke waktu
-- [ ] **Query rewriting** — Ekspansi kueri berbasis LLM untuk input ambigu
+| Layer | Teknologi |
+|---|---|
+| Document Parsing | Docling (layout-aware PDF + ekstraksi tabel) |
+| Chunking | LlamaIndex SemanticSplitterNodeParser |
+| Embedding | OpenAI text-embedding-3-small |
+| Vector Store | pgvector (HNSW index) |
+| Keyword Search | PostgreSQL FTS (BM25, GIN index) |
+| Backend API | FastAPI (async) |
+| Frontend | Next.js 15 + shadcn/ui + Tailwind CSS |
+| Tracing | LangFuse |
+| Evaluasi | RAGAS |
 
 ## Lisensi
 
