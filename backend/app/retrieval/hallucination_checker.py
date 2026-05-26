@@ -10,31 +10,31 @@ from app.llm_client import get_openai_client
 
 logger = logging.getLogger(__name__)
 
-CHECK_PROMPT = """Kamu adalah verifikator fakta untuk sistem regulasi keuangan Indonesia.
+CHECK_PROMPT = """You are a fact verifier for an Indonesian financial regulation system.
 
-Tugas: periksa apakah setiap klaim dalam JAWABAN didukung oleh KONTEKS yang diberikan.
+Task: verify whether each claim in the ANSWER is supported by the given CONTEXT.
 
-Konteks yang tersedia:
+Available context:
 {context}
 
-Jawaban yang perlu diverifikasi:
+Answer to verify:
 {answer}
 
 Return JSON:
 {{
   "is_hallucinated": true/false,
   "hallucination_score": 0.0-1.0,
-  "supported_claims": ["klaim yang didukung konteks"],
-  "unsupported_claims": ["klaim yang TIDAK didukung konteks"],
-  "verification_notes": "catatan verifikasi"
+  "supported_claims": ["claims supported by context"],
+  "unsupported_claims": ["claims NOT supported by context"],
+  "verification_notes": "verification notes"
 }}
 
-Panduan:
-- Jika klaim menyebutkan angka/persen/tanggal, pastikan angka persis ada di konteks
-- Jika klaim menyebutkan pasal/ayat, pastikan disebut di konteks
-- Jika klaim terlalu umum dan tidak bisa diverifikasi, anggap sebagai unsupported
-- hallucination_score = jumlah unsupported / total klaim
-- is_hallucinated = true jika ada unsupported claim yang signifikan
+Guidelines:
+- If a claim mentions numbers/percentages/dates, ensure the exact number exists in context
+- If a claim mentions articles/clauses, ensure they are referenced in context
+- If a claim is too vague to verify, treat it as unsupported
+- hallucination_score = unsupported count / total claims
+- is_hallucinated = true if any significant claim is unsupported
 
 JSON response:"""
 
@@ -56,7 +56,7 @@ async def check_hallucination(
             hallucination_score=0.0,
             supported_claims=[],
             unsupported_claims=[],
-            verification_notes="Empty answer, nothing to verify.",
+            verification_notes="Empty answer, nothing to verify."
         )
 
     if not context_chunks:
@@ -65,7 +65,7 @@ async def check_hallucination(
             hallucination_score=1.0,
             supported_claims=[],
             unsupported_claims=["No context available — cannot verify any claims."],
-            verification_notes="No context provided. All claims are unverifiable.",
+            verification_notes="No context provided. All claims unverifiable.",
         )
 
     context = "\n\n---\n\n".join(

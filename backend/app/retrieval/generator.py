@@ -11,14 +11,14 @@ from app.retrieval.searcher import SearchResult
 
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = """Kamu adalah asisten kepatuhan regulasi keuangan Indonesia.
-Aturan mutlak:
-1. HANYA jawab berdasarkan konteks/kutipan yang diberikan
-2. Jika informasi TIDAK ADA dalam konteks, katakan "Informasi tidak ditemukan dalam dokumen regulasi yang tersedia."
-3. JANGAN mengarang, menyimpulkan di luar konteks, atau menggunakan pengetahuan umum
-4. Setiap klaim HARUS disertai kutipan dari konteks
-5. Jawab dalam Bahasa Indonesia yang jelas dan terstruktur
-6. Sebutkan nomor dan pasal regulasi jika ada dalam konteks"""
+SYSTEM_PROMPT = """You are an Indonesian financial regulatory compliance assistant.
+Strict rules:
+1. ONLY answer based on the provided context/quotes
+2. If information is NOT in the context, say "Information not found in the available regulatory documents."
+3. DO NOT fabricate, infer beyond context, or use general knowledge
+4. Every claim MUST include a citation from the context
+5. Answer in clear, structured Indonesian
+6. Mention article numbers and regulation names if present in the context"""
 
 
 class Citation(BaseModel):
@@ -41,7 +41,7 @@ async def generate(
 ) -> AnswerResponse:
     if not results:
         return AnswerResponse(
-            answer="Informasi tidak ditemukan dalam dokumen regulasi yang tersedia.",
+            answer="Information not found in the available regulatory documents.",
             citations=[],
             confidence=0.0,
             related_regulations=[],
@@ -58,15 +58,15 @@ async def generate(
 
     context = "\n\n---\n\n".join(context_parts)
 
-    user_prompt = f"""Konteks regulasi:
+    user_prompt = f"""Regulatory context:
 
 {context}
 
 ---
 
-Pertanyaan: {query}
+Question: {query}
 
-Jawab berdasarkan konteks di atas. Sertakan referensi ke nomor konteks [1], [2], dst."""
+Answer based on the context above. Include references to context numbers [1], [2], etc."""
 
     try:
         provider = settings.llm_provider
@@ -87,7 +87,7 @@ Jawab berdasarkan konteks di atas. Sertakan referensi ke nomor konteks [1], [2],
     except Exception:
         logger.exception("Generation failed")
         return AnswerResponse(
-            answer="Gagal menghasilkan jawaban. Silakan coba lagi.",
+            answer="Failed to generate answer. Please try again.",
             citations=[],
             confidence=0.0,
             related_regulations=[],

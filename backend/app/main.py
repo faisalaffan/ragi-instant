@@ -26,7 +26,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 app = FastAPI(
     title="Ragi Instant",
-    description="Regulatory & Compliance Intelligence RAG",
+    description="Regulatory & Compliance Intelligence RAG — Indonesian financial regulations",
     version="0.1.0",
     lifespan=lifespan,
 )

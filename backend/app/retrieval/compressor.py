@@ -8,21 +8,21 @@ from app.retrieval.searcher import SearchResult
 
 logger = logging.getLogger(__name__)
 
-COMPRESSION_PROMPT = """Ringkas konteks berikut tanpa menghilangkan informasi faktual yang penting untuk menjawab pertanyaan tentang regulasi keuangan.
+COMPRESSION_PROMPT = """Summarize the following context without removing factual information critical for answering questions about financial regulations.
 
-Aturan:
-- Pertahankan SEMUA angka, persentase, tanggal, nomor pasal, dan nama regulasi
-- Pertahankan SEMUA definisi istilah
-- Jika ada tabel atau daftar, pertahankan strukturnya
-- Hapus kalimat transisi dan pengulangan
-- Target: kurangi panjang teks 40-60% tanpa kehilangan fakta
+Rules:
+- Preserve ALL numbers, percentages, dates, article numbers, and regulation names
+- Preserve ALL term definitions
+- If there are tables or lists, preserve their structure
+- Remove transition sentences and repetition
+- Target: reduce text length 40-60% without losing facts
 
-Pertanyaan yang akan dijawab: {query}
+Question to answer: {query}
 
-Konteks asli:
+Original context:
 {context}
 
-Konteks yang diringkas:"""
+Compressed context:"""
 
 
 async def compress_context(

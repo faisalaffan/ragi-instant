@@ -10,28 +10,28 @@ from app.llm_client import get_openai_client
 
 logger = logging.getLogger(__name__)
 
-ROUTER_PROMPT = """Kamu adalah query router untuk sistem pencarian regulasi keuangan Indonesia.
+ROUTER_PROMPT = """You are a query router for an Indonesian financial regulation search system.
 
-Klasifikasikan query user ke salah satu intent berikut:
-- regulation_lookup: mencari isi/pasal/ketentuan spesifik dalam regulasi
-- definition: menanyakan definisi/arti istilah keuangan/regulasi
-- comparison: membandingkan dua regulasi, dua versi, atau dua ketentuan
-- obligation_check: mengecek kewajiban/sanksi/batasan yang berlaku
-- general: pertanyaan umum yang tidak masuk kategori di atas
+Classify user queries into one of these intents:
+- regulation_lookup: searching for specific articles/provisions/clauses in regulations
+- definition: asking for the definition/meaning of financial/regulatory terms
+- comparison: comparing two regulations, two versions, or two provisions
+- obligation_check: checking applicable obligations/sanctions/limits
+- general: general questions not fitting the above categories
 
-Return JSON dengan format:
+Return JSON with format:
 {{
   "intent": "...",
-  "keywords": ["kata", "kunci", "dari", "query"],
+  "keywords": ["key", "terms", "from", "query"],
   "search_strategy": "dense_only" | "sparse_only" | "hybrid",
-  "reasoning": "alasan singkat"
+  "reasoning": "brief reason"
 }}
 
-Aturan search_strategy:
-- regulation_lookup → hybrid (butuh exact match pasal + semantic similarity)
-- definition → dense_only (definisi bisa diparafrase, perlu semantic)
-- comparison → hybrid (butuh dua sisi perbandingan)
-- obligation_check → sparse_only (butuh exact match angka/sanksi)
+Search strategy rules:
+- regulation_lookup → hybrid (needs exact article match + semantic similarity)
+- definition → dense_only (definitions may be paraphrased, needs semantic)
+- comparison → hybrid (needs both sides of comparison)
+- obligation_check → sparse_only (needs exact number/sanction match)
 - general → hybrid
 
 Query: {query}
@@ -40,9 +40,9 @@ JSON response:"""
 
 class RouterResult(BaseModel):
     intent: str = Field(description="regulation_lookup | definition | comparison | obligation_check | general")
-    keywords: list[str]
+    keywords: list[str] = Field(default_factory=list)
     search_strategy: str = Field(description="dense_only | sparse_only | hybrid")
-    reasoning: str
+    reasoning: str = ""
 
 
 async def route_query(query: str) -> RouterResult:

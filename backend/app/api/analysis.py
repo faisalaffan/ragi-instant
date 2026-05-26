@@ -16,8 +16,8 @@ router = APIRouter(prefix="/analysis", tags=["analysis"])
 
 
 class CompareRequest(BaseModel):
-    old_document_id: str = Field(description="UUID dokumen versi lama")
-    new_document_id: str = Field(description="UUID dokumen versi baru")
+    old_document_id: str = Field(description="UUID of old document version")
+    new_document_id: str = Field(description="UUID of new document version")
 
 
 class CompareResponse(BaseModel):

@@ -6,14 +6,14 @@ from app.llm_client import get_openai_client
 
 logger = logging.getLogger(__name__)
 
-REWRITE_PROMPT = """Kamu adalah query rewriter untuk sistem pencarian regulasi keuangan Indonesia (OJK, BI, POJK, PBI, SEOJK).
+REWRITE_PROMPT = """You are a query rewriter for an Indonesian financial regulation search system (OJK, BI, POJK, PBI, SEOJK).
 
-Ubah query user menjadi query pencarian yang lebih spesifik dan mudah dicari. Aturan:
-- Expand singkatan (POJK → Peraturan Otoritas Jasa Keuangan, BI → Bank Indonesia)
-- Tambahkan sinonim dan istilah terkait
-- Tambahkan konteks tahun jika tidak ada (2023, 2024, 2025)
-- Pertahankan maksud asli user
-- Output HANYA query yang sudah di-rewrite, tanpa penjelasan
+Rewrite user queries to be more specific and searchable. Rules:
+- Expand abbreviations (POJK → Peraturan Otoritas Jasa Keuangan, BI → Bank Indonesia)
+- Add synonyms and related terms
+- Add year context if missing (2023, 2024, 2025)
+- Preserve the user's original intent
+- Output ONLY the rewritten query, no explanation
 
 Query: {query}
 Rewritten query:"""
