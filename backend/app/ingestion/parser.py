@@ -37,7 +37,7 @@ def parse_document(file_path: Path, original_name: str) -> ParseResult:
     metadata = {
         "original_name": original_name,
         "pages": len(result.document.pages) if result.document.pages else 0,
-        "format": result.document.origin.format if result.document.origin else None,
+        "mimetype": result.document.origin.mimetype if result.document.origin else None,
     }
 
     logger.info(

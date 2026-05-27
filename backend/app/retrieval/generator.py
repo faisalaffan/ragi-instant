@@ -76,6 +76,7 @@ Answer based on the context above. Include references to context numbers [1], [2
         else:
             response = await _generate_openai(user_prompt)
 
+        response = _map_citation_ids(response, results)
         response.confidence = _compute_confidence(results, response.citations)
         logger.info(
             "Generated answer (%s/%s): %d citations, confidence=%.2f",
@@ -128,16 +129,39 @@ async def _generate_anthropic(user_prompt: str) -> AnswerResponse:
     )
 
 
+def _map_citation_ids(
+    response: AnswerResponse, results: list[SearchResult]
+) -> AnswerResponse:
+    """Map citation chunk_id dari nomor referensi [1], [2] ke UUID asli."""
+    for citation in response.citations:
+        try:
+            ref_num = int(citation.chunk_id)
+            if 1 <= ref_num <= len(results):
+                citation.chunk_id = results[ref_num - 1].chunk_id
+                if not citation.document_title:
+                    citation.document_title = results[ref_num - 1].document_title
+                if citation.section is None:
+                    citation.section = results[ref_num - 1].section
+                if citation.page is None:
+                    citation.page = results[ref_num - 1].page
+        except (ValueError, TypeError):
+            pass  # already a UUID or other format
+    return response
+
+
 def _compute_confidence(
     results: list[SearchResult], citations: list[Citation]
 ) -> float:
     if not results:
         return 0.0
 
-    avg_score = sum(r.score for r in results) / len(results)
-
     cited_ids = {c.chunk_id for c in citations}
-    cited_count = sum(1 for r in results if r.chunk_id in cited_ids)
-    coverage = cited_count / len(results) if results else 0.0
+    cited_scores = [r.score for r in results if r.chunk_id in cited_ids]
 
-    return round(avg_score * coverage, 2)
+    if not cited_scores:
+        return 0.0
+
+    avg_cited_score = sum(cited_scores) / len(cited_scores)
+    coverage = len(cited_scores) / len(results)
+
+    return round(0.6 * avg_cited_score + 0.4 * coverage, 2)

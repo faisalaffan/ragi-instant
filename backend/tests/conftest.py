@@ -7,10 +7,11 @@ def mock_env(monkeypatch):
     monkeypatch.setattr("app.config.settings.database_url", "postgresql://test@localhost/test")
     monkeypatch.setattr("app.config.settings.openai_api_key", "test-key")
     monkeypatch.setattr("app.config.settings.anthropic_api_key", "test-key")
-    monkeypatch.setattr("app.config.settings.cohere_api_key", "test-key")
     monkeypatch.setattr("app.config.settings.langfuse_public_key", "")
     monkeypatch.setattr("app.config.settings.langfuse_secret_key", "")
+    monkeypatch.setattr("app.config.settings.llm_provider", "openai")
     monkeypatch.setattr("app.config.settings.generation_model", "gpt-4o-mini")
+    monkeypatch.setattr("app.config.settings.openai_base_url", "https://api.deepseek.com")
 
 
 @pytest.fixture

@@ -4,12 +4,10 @@ import logging
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.config import settings
-from app.llm_client import get_embedding_client
+from app.ingestion.chunker import get_embed_model
 
 logger = logging.getLogger(__name__)
 
-EMBEDDING_MODEL = "text-embedding-3-small"
 DENSE_TOP_K = 20
 SPARSE_TOP_K = 20
 RRF_K = 60
@@ -29,17 +27,15 @@ class SearchResult:
 
 
 async def hybrid_search(db: AsyncSession, query: str) -> list[SearchResult]:
-    client = get_embedding_client()
+    embed_model = get_embed_model()
 
-    embedding_resp = await asyncio.to_thread(
-        lambda: client.embeddings.create(model=EMBEDDING_MODEL, input=query)
+    raw_embedding = await asyncio.to_thread(
+        lambda: embed_model.get_text_embedding(query)
     )
-    query_embedding = embedding_resp.data[0].embedding
+    query_embedding = "[" + ",".join(str(v) for v in raw_embedding) + "]"
 
-    dense_results, sparse_results = await asyncio.gather(
-        _dense_search(db, query_embedding),
-        _sparse_search(db, query),
-    )
+    dense_results = await _dense_search(db, query_embedding)
+    sparse_results = await _sparse_search(db, query)
 
     return _reciprocal_rank_fusion(dense_results, sparse_results)
 
@@ -49,12 +45,12 @@ async def _dense_search(
 ) -> list[SearchResult]:
     result = await db.execute(
         text("""
-            SELECT c.id, c.content, 1 - (c.embedding <=> :embedding) AS score,
+            SELECT c.id, c.content, 1 - (c.embedding <=> CAST(:embedding AS vector)) AS score,
                    d.title, c.section, c.page, c.meta
             FROM chunks c
             JOIN documents d ON c.document_id = d.id
             WHERE d.status = 'ready'
-            ORDER BY c.embedding <=> :embedding
+            ORDER BY c.embedding <=> CAST(:embedding AS vector)
             LIMIT :limit
         """),
         {"embedding": embedding, "limit": DENSE_TOP_K},

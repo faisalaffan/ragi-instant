@@ -50,6 +50,7 @@ class IngestionPipeline:
         return doc
 
     async def _run(self, doc: Document, content: bytes, filename: str) -> None:
+        doc_id = doc.id
         async with _async_session_factory() as session:
             try:
                 doc = await session.merge(doc)
@@ -79,7 +80,9 @@ class IngestionPipeline:
                 await embed_and_index(session, doc, chunks)
 
             except Exception as exc:
-                logger.exception("Ingestion failed for %s", doc.id)
+                logger.exception("Ingestion failed for %s", doc_id)
+                await session.rollback()
+                doc = await session.merge(Document(id=doc_id))
                 doc.status = "error"
                 doc.error_message = str(exc)
                 await session.commit()

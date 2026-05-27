@@ -4,15 +4,12 @@ from uuid import UUID
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.config import settings
-from app.llm_client import get_embedding_client
 from app.ingestion.chunker import ChunkResult
+from app.ingestion.chunker import get_embed_model
 from app.models.document import Chunk
 from app.models.document import Document
 
 logger = logging.getLogger(__name__)
-
-EMBEDDING_MODEL = "text-embedding-3-small"
 
 
 async def embed_and_index(
@@ -20,13 +17,12 @@ async def embed_and_index(
     document: Document,
     chunks: list[ChunkResult],
 ) -> int:
-    client = get_embedding_client()
+    embed_model = get_embed_model()
 
     texts = [c.text for c in chunks]
     logger.info("Embedding %d chunks for document %s", len(texts), document.id)
 
-    response = client.embeddings.create(model=EMBEDDING_MODEL, input=texts)
-    embeddings = [d.embedding for d in response.data]
+    embeddings = embed_model.get_text_embedding_batch(texts)
 
     chunk_objs: list[Chunk] = []
     for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):

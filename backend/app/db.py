@@ -36,3 +36,7 @@ async def init_db() -> None:
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
         await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+        try:
+            await conn.execute(text("ALTER TABLE chunks ALTER COLUMN embedding TYPE vector(384)"))
+        except Exception:
+            pass  # column already correct or table empty

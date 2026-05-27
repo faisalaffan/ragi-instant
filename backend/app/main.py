@@ -1,3 +1,8 @@
+import os
+
+os.environ["TORCH_CPP_LOG_LEVEL"] = "ERROR"
+os.environ["GLOG_minloglevel"] = "2"
+
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 

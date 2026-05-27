@@ -69,7 +69,7 @@ class Chunk(Base):
     )
     sequence: Mapped[int] = mapped_column()
     content: Mapped[str] = mapped_column(Text)
-    embedding: Mapped[list[float]] = mapped_column(Vector(1536))
+    embedding: Mapped[list[float]] = mapped_column(Vector(384))
     section: Mapped[str | None] = mapped_column(String(512), nullable=True)
     page: Mapped[int | None] = mapped_column(nullable=True)
     search_vector: Mapped[str] = mapped_column(
