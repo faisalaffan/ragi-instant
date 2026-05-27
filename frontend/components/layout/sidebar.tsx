@@ -1,17 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  LayoutDashboard, 
-  FileText, 
-  UploadCloud, 
-  MessageSquare, 
-  Columns, 
-  BarChart3, 
-  Settings, 
-  ChevronLeft, 
+import {
+  LayoutDashboard,
+  FileText,
+  UploadCloud,
+  MessageSquare,
+  Columns,
+  BarChart3,
+  Settings,
+  ChevronLeft,
   ChevronRight,
   Menu,
   X
@@ -37,8 +37,25 @@ const navItems: NavItem[] = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { sidebarExpanded, toggleSidebar } = useUIStore();
+  const { sidebarExpanded, toggleSidebar, theme } = useUIStore();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('dark');
+
+  useEffect(() => {
+    if (theme === 'system') {
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setResolvedTheme(isDark ? 'dark' : 'light');
+
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleChange = (e: MediaQueryListEvent) => {
+        setResolvedTheme(e.matches ? 'dark' : 'light');
+      };
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    } else {
+      setResolvedTheme(theme);
+    }
+  }, [theme]);
 
   const isActive = (href: string) => {
     if (href === '/') {
@@ -75,9 +92,11 @@ export function Sidebar() {
       >
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-info flex items-center justify-center font-bold text-white shadow-md shadow-primary/20">
-              R
-            </div>
+            <img
+              src="/assets/04_ICON_LIGHT.png"
+              alt="Ragi Instant Logo"
+              className="w-8 h-8 object-contain transition-transform duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+            />
             <span className="font-bold text-lg bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
               Ragi Instant
             </span>
@@ -113,7 +132,7 @@ export function Sidebar() {
             );
           })}
         </nav>
-        
+
         <div className="pt-4 border-t border-card-border text-center text-xs text-muted-foreground">
           v0.1.0 • Ready
         </div>
@@ -133,9 +152,11 @@ export function Sidebar() {
         )}>
           {sidebarExpanded ? (
             <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-primary to-info flex items-center justify-center font-bold text-white shadow-lg shadow-primary/20">
-                R
-              </div>
+              <img
+                src="/assets/04_ICON_LIGHT.png"
+                alt="Ragi Instant Logo"
+                className="w-9 h-9 object-contain transition-transform duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+              />
               <div className="flex flex-col">
                 <span className="font-bold text-base tracking-tight bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
                   Ragi Instant
@@ -146,9 +167,11 @@ export function Sidebar() {
               </div>
             </div>
           ) : (
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-primary to-info flex items-center justify-center font-bold text-white shadow-lg shadow-primary/20">
-              R
-            </div>
+            <img
+              src="/assets/04_ICON_LIGHT.png"
+              alt="Ragi Instant Logo"
+              className="w-10 h-10 object-contain transition-transform duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+            />
           )}
 
           {sidebarExpanded && (
@@ -184,8 +207,8 @@ export function Sidebar() {
                 href={item.href}
                 className={cn(
                   "flex items-center rounded-lg text-sm font-medium transition-all duration-200 group relative",
-                  sidebarExpanded 
-                    ? "space-x-3 px-3 py-2.5" 
+                  sidebarExpanded
+                    ? "space-x-3 px-3 py-2.5"
                     : "p-2.5 justify-center mb-1.5",
                   Active
                     ? "bg-primary text-white shadow-md shadow-primary/25"
@@ -198,7 +221,7 @@ export function Sidebar() {
                   !Active && "group-hover:scale-105"
                 )} />
                 {sidebarExpanded && <span>{item.label}</span>}
-                
+
                 {/* Tooltip for collapsed sidebar */}
                 {!sidebarExpanded && (
                   <span className="absolute left-14 scale-0 group-hover:scale-100 transition-all duration-200 bg-background text-foreground text-xs py-1.5 px-3 rounded-md shadow-lg border border-card-border whitespace-nowrap z-50 pointer-events-none">

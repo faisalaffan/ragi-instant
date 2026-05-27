@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Providers } from '@/components/providers';
 import { Sidebar } from '@/components/layout/sidebar';
 import { Header } from '@/components/layout/header';
+import { SplashScreen } from '@/components/shared/splash-screen';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -60,6 +61,7 @@ export default function RootLayout({
       </head>
       <body className="h-full bg-background text-foreground transition-colors duration-300 font-sans antialiased overflow-hidden">
         <Providers>
+          <SplashScreen />
           <div className="flex h-screen overflow-hidden w-full">
             {/* Navigasi Sidebar Kiri */}
             <Sidebar />
