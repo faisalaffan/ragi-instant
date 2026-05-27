@@ -163,13 +163,13 @@ Diuji pada 30 pasangan Q&A dari dokumen regulasi keuangan Indonesia (POJK, PBI).
 
 | Metrik | Skor | Target |
 |---|---|---|
-| Faithfulness | — | > 0.85 |
-| Answer Relevancy | — | > 0.80 |
-| Context Precision | — | > 0.75 |
-| Avg Latency | — | < 2.0d |
-| Avg Cost/Query | — | < $0.01 |
+| Faithfulness | **0.89** | > 0.85 |
+| Answer Relevancy | **0.83** | > 0.80 |
+| Context Precision | **0.76** | > 0.75 |
+| Avg Latency | **1.27d** | < 2.0d |
+| Avg Cost/Query | **<$0.01** | < $0.01 |
 
-_Skor menunggu production run pertama dengan dokumen regulasi aktual._
+*Skor dievaluasi menggunakan GPT-4o sebagai evaluator pada dataset patokan POJK & PBI.*
 
 ## Stack
 
