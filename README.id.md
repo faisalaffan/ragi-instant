@@ -95,6 +95,20 @@ Pipeline evaluasi RAGAS bawaan dengan 30 pasangan Q&A yang dikurasi. Mengukur fa
 **Observabilitas**
 LangFuse tracing end-to-end setiap langkah: query rewriting, routing, hybrid search, reranking, compression, generation, dan hallucination check. Latency dan confidence per langkah.
 
+## Demo Aplikasi
+
+Berikut adalah pratinjau visual dari antarmuka dashboard utama:
+
+| Startup Splash Screen | Dashboard Sistem Utama |
+|---|---|
+| <img src="assets/DEMO_APPS/00_SPLASH_SCREEN.png" width="100%"> | <img src="assets/DEMO_APPS/01_DASHBOARD.png" width="100%"> |
+
+| AI Query Workspace & Kutipan | Benchmark Evaluasi RAGAS |
+|---|---|
+| <img src="assets/DEMO_APPS/11_RESPONSE_OK_WITH_80_PERCENT_CONFIDENT.png" width="100%"> | <img src="assets/DEMO_APPS/14_EVALUATE_RAGAS.png" width="100%"> |
+
+👉 **Jelajahi galeri lengkap berisi 16 tangkapan layar dengan penjelasan detail setiap langkah pipeline di [Galeri Demo Ragi Instant](./docs/demo.md).**
+
 ## Instalasi
 
 ```bash

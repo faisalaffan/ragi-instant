@@ -95,6 +95,20 @@ Built-in RAGAS evaluation pipeline with 30 curated Q&A pairs. Measures faithfuln
 **Observability**
 LangFuse end-to-end tracing of every step: query rewriting, routing, hybrid search, reranking, compression, generation, and hallucination check. Latency and confidence per step.
 
+## Demo
+
+Here is a visual preview of the primary dashboard interfaces:
+
+| Startup Splash Screen | Main System Dashboard |
+|---|---|
+| <img src="assets/DEMO_APPS/00_SPLASH_SCREEN.png" width="100%"> | <img src="assets/DEMO_APPS/01_DASHBOARD.png" width="100%"> |
+
+| AI Query Workspace & Citations | Automated RAGAS Benchmarks |
+|---|---|
+| <img src="assets/DEMO_APPS/11_RESPONSE_OK_WITH_80_PERCENT_CONFIDENT.png" width="100%"> | <img src="assets/DEMO_APPS/14_EVALUATE_RAGAS.png" width="100%"> |
+
+👉 **Explore the full 16-screenshot gallery with detailed pipeline step descriptions in the [Ragi Instant Demo Gallery](./docs/demo.md).**
+
 ## Installation
 
 ```bash
