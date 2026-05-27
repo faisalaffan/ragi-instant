@@ -9,7 +9,6 @@ Requires RAGAS and datasets installed.
 import argparse
 import asyncio
 import json
-import sys
 from pathlib import Path
 
 from app.db import async_session

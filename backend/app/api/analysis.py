@@ -1,4 +1,3 @@
-from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter
@@ -9,7 +8,6 @@ from pydantic import Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_db
-from app.ingestion.change_detector import ChangeReport
 from app.ingestion.change_detector import detect_changes
 
 router = APIRouter(prefix="/analysis", tags=["analysis"])

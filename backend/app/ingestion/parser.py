@@ -4,7 +4,6 @@ from pathlib import Path
 
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 
-from docling.datamodel.base_models import InputFormat
 from docling.document_converter import DocumentConverter
 
 logger = logging.getLogger(__name__)

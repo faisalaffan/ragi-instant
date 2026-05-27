@@ -7,7 +7,6 @@ from app.config import settings
 from app.retrieval.compressor import compress_context
 from app.retrieval.generator import AnswerResponse
 from app.retrieval.generator import generate
-from app.retrieval.hallucination_checker import check_hallucination
 from app.retrieval.reranker import rerank
 from app.retrieval.rewriter import rewrite_query
 from app.retrieval.router import route_query

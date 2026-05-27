@@ -4,7 +4,6 @@ import logging
 from uuid import UUID
 
 import instructor
-from openai import OpenAI
 from pydantic import BaseModel
 from pydantic import Field
 from sqlalchemy import select

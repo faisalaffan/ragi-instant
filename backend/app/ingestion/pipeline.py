@@ -11,7 +11,6 @@ from sqlalchemy.orm import selectinload
 
 from app.db import async_session as _async_session_factory
 from app.ingestion.chunker import chunk_markdown
-from app.ingestion.indexer import delete_document_chunks
 from app.ingestion.indexer import embed_and_index
 from app.ingestion.parser import parse_document
 from app.models.document import Chunk
