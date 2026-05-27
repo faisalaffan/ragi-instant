@@ -108,3 +108,52 @@ Configure backend API connection, adjust model hyperparameters (temperature, max
 <p align="center">
   <img src="../assets/DEMO_APPS/15_SETTINGS.png" alt="Settings Interface" width="90%">
 </p>
+
+---
+
+## 🔍 5. Production-Grade Observability (Langfuse)
+
+We don't build blind RAG pipelines. Under production compliance standards, relying on "hallucination luck" is a major liability. Every query expansion, routing classifier, vector match, rerank scoring, context compression compression, and hallucination verify claim is end-to-end traced, latency-timed, and cost-audited.
+
+### Comprehensive End-to-End Tracing (Spans)
+Langfuse automatically traces the entire hybrid RAG pipeline sequence, logging exactly how many tokens were spent, LLM model names, costs, and intermediate step latencies in a unified timeline.
+
+<p align="center">
+  <img src="../assets/LANGFUSE_OBSERVABILITY/01_ALL_SPAN.png" alt="End-to-End Trace Tree" width="90%">
+</p>
+
+### Step 1: Query Rewriting Span
+Inspect the exact query expansion mechanism, showing how raw user inputs like `"POJK terbaru pinjol"` are expanded by the LLM into full semantic sentences.
+
+<p align="center">
+  <img src="../assets/LANGFUSE_OBSERVABILITY/02_QUERY_REWRITING.png" alt="Query Rewriter Trace" width="90%">
+</p>
+
+### Step 2: Intent Routing Span
+Trace the LLM intent classifier routing decisions, ensuring queries map correctly to appropriate specialized database search strategies.
+
+<p align="center">
+  <img src="../assets/LANGFUSE_OBSERVABILITY/03_QUERY_ROUTING.png" alt="Query Router Trace" width="90%">
+</p>
+
+### Step 3: Hybrid Search Database Queries
+Trace dense pgvector matches and sparse keyword FTS (BM25) searches, showing RRF (Reciprocal Rank Fusion) inputs and fused candidate outcomes.
+
+<p align="center">
+  <img src="../assets/LANGFUSE_OBSERVABILITY/04_HYBRID_SEARCH.png" alt="Hybrid Search Trace" width="90%">
+</p>
+
+### Step 4: Cohere Reranking Weights
+Trace Cohere Rerank v3 cross-encoder execution, auditing exactly how candidates are ordered before context generation.
+
+<p align="center">
+  <img src="../assets/LANGFUSE_OBSERVABILITY/05_RERANKING_COHERE.png" alt="Cohere Rerank Trace" width="90%">
+</p>
+
+### Step 5: Context Compression & Ingestion Costs
+Observe the context compressor summarizing hundreds of legal clauses down to factual nuggets, and trace the direct token savings and cost reductions in real-time.
+
+<p align="center">
+  <img src="../assets/LANGFUSE_OBSERVABILITY/06_CONTEXT_COMPRESSION.png" alt="Context Compression Trace" width="90%">
+</p>
+

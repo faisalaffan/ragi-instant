@@ -171,6 +171,26 @@ Diuji pada 30 pasangan Q&A dari dokumen regulasi keuangan Indonesia (POJK, PBI).
 
 *Skor dievaluasi menggunakan GPT-4o sebagai evaluator pada dataset patokan POJK & PBI.*
 
+## 🔍 Observabilitas & Kontrol Biaya (Production-Grade)
+
+Dalam kepatuhan regulasi dan hukum, meluncurkan pipeline RAG secara membabi buta dan mengandalkan "keberuntungan halusinasi" adalah risiko besar. **Ragi Instant** menggunakan pendekatan berorientasi rekayasa (*engineering-first*): **kami melacak dan mengukur setiap token, latensi, biaya, dan langkah perantara.**
+
+Menggunakan **Langfuse**, seluruh alur hybrid RAG ditelusuri secara transparan:
+
+| Penelusuran End-to-End (Spans) | Kompresi Konteks & Biaya |
+|---|---|
+| <img src="assets/LANGFUSE_OBSERVABILITY/01_ALL_SPAN.png" width="100%"> | <img src="assets/LANGFUSE_OBSERVABILITY/06_CONTEXT_COMPRESSION.png" width="100%"> |
+
+Kami melakukan penelusuran dan audit pada setiap langkah modular:
+*   **Query Rewriting**: Memantau bagaimana kueri ambigu diperluas.
+*   **Query Intent Routing**: Memeriksa klasifikasi niat (*intent classification*) oleh LLM dan target routing.
+*   **Hybrid Search**: Melacak log pencarian dense pgvector & sparse PostgreSQL FTS BM25.
+*   **Cohere Reranking**: Mengevaluasi skor cross-encoder dan perankingan kandidat.
+*   **Context Compression**: Mengaudit penghematan token dan kompresi ringkasan LLM sebelum proses generasi.
+*   **Hallucination Check**: Memverifikasi keselarasan klaim terhadap fakta konteks sumber untuk menangkap klaim tanpa dasar.
+
+👉 **Jelajahi trace lengkap untuk setiap langkah di [Galeri Observabilitas Langfuse](./docs/demo.md#5-production-grade-observability-langfuse).**
+
 ## Stack
 
 | Layer | Teknologi |

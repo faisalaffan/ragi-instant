@@ -171,6 +171,26 @@ Evaluated on 30 Q&A pairs from Indonesian financial regulatory documents (POJK, 
 
 *Scores evaluated using GPT-4o as the judge over the curated POJK & PBI benchmark dataset.*
 
+## 🔍 Production-Grade Observability
+
+In legal and regulatory compliance, deploying a RAG pipeline blindly and relying on "hallucination luck" is a major liability. **Ragi Instant** takes an engineering-first approach: **we measure and trace every single token, latency, cost, and intermediate step.**
+
+Using **Langfuse**, the entire hybrid pipeline is transparently traced:
+
+| End-to-End Tracing (Spans) | Context Compression & Costs |
+|---|---|
+| <img src="assets/LANGFUSE_OBSERVABILITY/01_ALL_SPAN.png" width="100%"> | <img src="assets/LANGFUSE_OBSERVABILITY/06_CONTEXT_COMPRESSION.png" width="100%"> |
+
+We trace and audit every single modular step:
+*   **Query Rewriting**: Visualizing how ambiguous user queries expand.
+*   **Query Intent Routing**: Inspecting LLM intent classification confidence and routing targets.
+*   **Hybrid Search**: Dense pgvector matches & sparse PostgreSQL FTS BM25 database logs.
+*   **Cohere Reranking**: Evaluating cross-encoder scores and candidate ordering.
+*   **Context Compression**: Auditing token savings and LLM summarization context before generation.
+*   **Hallucination Check**: Factual checks against source context to identify unsupported claims.
+
+👉 **View full detailed traces for each step in the [Langfuse Observability & Trace Gallery](./docs/demo.md#5-production-grade-observability-langfuse).**
+
 ## Stack
 
 | Layer | Technology |
